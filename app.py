@@ -1,7 +1,5 @@
 """Streamlit SLA dashboard."""
 
-from __future__ import annotations
-
 from io import BytesIO
 
 import pandas as pd
@@ -44,8 +42,6 @@ def main() -> None:
     except ValueError as exc:
         st.error(str(exc))
         return
-
-    st.session_state["tickets"] = data
 
     st.sidebar.header("Global filters")
     regions = st.sidebar.multiselect("Regions", sorted(data["region"].dropna().unique()))
