@@ -1,7 +1,5 @@
 """Streamlit-independent Excel and PDF report generation."""
 
-from __future__ import annotations
-
 from io import BytesIO
 
 import pandas as pd

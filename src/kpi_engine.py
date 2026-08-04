@@ -1,7 +1,5 @@
 """Pure ticket normalization, filtering, and KPI calculations."""
 
-from __future__ import annotations
-
 import re
 from collections.abc import Iterable
 
