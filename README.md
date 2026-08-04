@@ -37,4 +37,4 @@ pytest
 - **Reopen rate:** tickets with at least one reopen / all tickets.
 - **Technician CSAT:** average non-null CSAT per technician.
 
-All elapsed-time calculations use absolute UTC under a 24/7 SLA clock. Region-specific IANA time zones are retained for display and future business-hours support.
+All elapsed-time calculations use absolute UTC under a 24/7 SLA clock.
