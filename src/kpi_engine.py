@@ -6,15 +6,7 @@ from collections.abc import Iterable
 import numpy as np
 import pandas as pd
 
-from src.config import PRIORITY_SLA_HOURS, REGION_TIMEZONES, REQUIRED_COLUMNS, RESOLVED_STATES
-
-ALIASES = {
-    "number": "ticket_id",
-    "sys_id": "ticket_id",
-    "opened": "opened_at",
-    "resolved": "resolved_at",
-    "assignee": "assigned_to",
-}
+from src.config import PRIORITY_SLA_HOURS, REGIONS, REQUIRED_COLUMNS, RESOLVED_STATES
 
 
 def _column_name(value: object) -> str:
@@ -37,7 +29,7 @@ def normalize_tickets(data: pd.DataFrame, now: pd.Timestamp | None = None) -> pd
         raise ValueError("Ticket data is empty")
 
     frame = data.copy()
-    frame.columns = [ALIASES.get(_column_name(column), _column_name(column)) for column in frame.columns]
+    frame.columns = [_column_name(column) for column in frame.columns]
     missing = sorted(REQUIRED_COLUMNS - set(frame.columns))
     if missing:
         raise ValueError(f"Missing required columns: {', '.join(missing)}")
@@ -60,10 +52,9 @@ def normalize_tickets(data: pd.DataFrame, now: pd.Timestamp | None = None) -> pd
         raise ValueError("sla_target_hours must be positive")
 
     frame["region"] = frame["region"].astype("string").str.strip()
-    invalid_regions = sorted(set(frame["region"].dropna()) - set(REGION_TIMEZONES))
+    invalid_regions = sorted(set(frame["region"].dropna()) - set(REGIONS))
     if invalid_regions:
         raise ValueError(f"Unknown regions: {', '.join(invalid_regions)}")
-    frame["region_timezone"] = frame["region"].map(REGION_TIMEZONES)
     frame["fcr_flag"] = _to_bool(frame["fcr_flag"])
     frame["reopen_count"] = pd.to_numeric(frame["reopen_count"], errors="coerce").fillna(0).clip(lower=0).astype(int)
     frame["csat"] = pd.to_numeric(frame["csat"], errors="coerce")

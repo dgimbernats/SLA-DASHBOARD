@@ -5,7 +5,7 @@ from typing import BinaryIO
 
 import numpy as np
 import pandas as pd
-from src.config import PRIORITY_SLA_HOURS, REGION_TIMEZONES
+from src.config import PRIORITY_SLA_HOURS, REGIONS
 
 
 def generate_synthetic_tickets(n_records: int = 5_000, seed: int = 42) -> pd.DataFrame:
@@ -26,7 +26,7 @@ def generate_synthetic_tickets(n_records: int = 5_000, seed: int = 42) -> pd.Dat
     resolved_at[~is_resolved] = pd.NaT
 
     priorities = rng.choice(["P1", "P2", "P3", "P4"], n_records, p=[0.05, 0.20, 0.45, 0.30])
-    regions = rng.choice(list(REGION_TIMEZONES), n_records, p=[0.30, 0.30, 0.25, 0.15])
+    regions = rng.choice(REGIONS, n_records, p=[0.30, 0.30, 0.25, 0.15])
     open_states = rng.choice(["New", "In Progress", "On Hold"], n_records)
     closed_states = rng.choice(["Resolved", "Closed"], n_records, p=[0.8, 0.2])
     states = np.where(is_resolved, closed_states, open_states)
